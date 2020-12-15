@@ -1,18 +1,23 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {Image, View, StyleSheet} from 'react-native';
 
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {getWeatherIcon} from '../utils/getWeatherIcon';
 
 const styles = StyleSheet.create({
   container: {alignItems: 'center'},
+  icon: {
+    width: 200,
+    height: 200,
+    tintColor: '#FFF',
+  },
 });
 
 export const WeatherIcon = ({icon}) => (
   <View style={styles.container}>
-    <MaterialCommunityIcons
-      name="weather-night-partly-cloudy"
-      size={200}
-      color="#FFF"
+    <Image
+      source={getWeatherIcon(icon)}
+      style={styles.icon}
+      resizeMode="contain"
     />
   </View>
 );

@@ -13,6 +13,7 @@ import {format} from 'date-fns';
 import {WeatherIcon} from '../components/WeatherIcon';
 import {BasicRow} from '../components/List';
 import {H1, H2, P} from '../components/Text';
+import Header from '../components/Header';
 
 import forecastData from '../data/forecast';
 import getWeatherImage from '../utils/getWeatherImage';
@@ -22,8 +23,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     backgroundColor: '#1E3FC2',
-    paddingTop: 20,
-    paddingHorizontal: 16,
   },
   forecastContainer: {
     paddingHorizontal: 10,
@@ -45,11 +44,15 @@ const styles = StyleSheet.create({
     width: null,
     height: null,
     resizeMode: 'cover',
-    opacity: 0.8,
   },
   textDecoration: {
-    textShadowColor: '#000',
-    textShadowRadius: 2,
+    // textShadowColor: '#000',
+    // textShadowRadius: 2,
+  },
+  detailsContainer: {
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    paddingTop: 32,
+    paddingHorizontal: 16,
   },
 });
 
@@ -95,9 +98,10 @@ const Details = () => {
       style={styles.container}
       imageStyle={styles.image}>
       <StatusBar barStyle="light-content" />
-      <ScrollView>
+      <Header headerTitle="Broomfield" />
+      <ScrollView style={styles.detailsContainer}>
         <SafeAreaView>
-          <WeatherIcon />
+          <WeatherIcon icon={'01d'} />
           <H1 style={styles.textDecoration}>38°</H1>
           <BasicRow>
             <H2 style={styles.textDecoration}>{'Humidity: 11%'}</H2>
