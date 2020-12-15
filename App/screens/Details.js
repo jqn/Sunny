@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {
+  ImageBackground,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -14,6 +15,7 @@ import {BasicRow} from '../components/List';
 import {H1, H2, P} from '../components/Text';
 
 import forecastData from '../data/forecast';
+import getWeatherImage from '../utils/getWeatherImage';
 
 const styles = StyleSheet.create({
   container: {
@@ -37,6 +39,17 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontFamily: 'Lato-Regular',
     marginRight: 10,
+  },
+  image: {
+    flex: 1,
+    width: null,
+    height: null,
+    resizeMode: 'cover',
+    opacity: 0.8,
+  },
+  textDecoration: {
+    textShadowColor: '#000',
+    textShadowRadius: 2,
   },
 });
 
@@ -77,33 +90,42 @@ const Details = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      source={getWeatherImage('Clear')}
+      style={styles.container}
+      imageStyle={styles.image}>
       <StatusBar barStyle="light-content" />
       <ScrollView>
         <SafeAreaView>
           <WeatherIcon />
-          <H1>38°</H1>
+          <H1 style={styles.textDecoration}>38°</H1>
           <BasicRow>
-            <H2>{'Humidity: 11%'}</H2>
+            <H2 style={styles.textDecoration}>{'Humidity: 11%'}</H2>
           </BasicRow>
           <BasicRow>
-            <H2>{'Low: 34°'}</H2>
-            <H2>{'High: 45°'}</H2>
+            <H2 style={styles.textDecoration}>{'Low: 34°'}</H2>
+            <H2 style={styles.textDecoration}>{'High: 45°'}</H2>
           </BasicRow>
           <View style={styles.forecastContainer}>
             {forecast.map((day) => (
               <BasicRow key={day.day} style={styles.basicRow}>
-                <P>{format(new Date(day.day), 'EEEE, MMM d')}</P>
+                <P style={styles.textDecoration}>
+                  {format(new Date(day.day), 'EEEE, MMM d')}
+                </P>
                 <View style={styles.group}>
-                  <P style={styles.temp}>{Math.round(day.temp_max)}</P>
-                  <P>{Math.round(day.temp_min)}</P>
+                  <P style={[styles.temp, styles.textDecoration]}>
+                    {Math.round(day.temp_max)}
+                  </P>
+                  <P style={styles.textDecoration}>
+                    {Math.round(day.temp_min)}
+                  </P>
                 </View>
               </BasicRow>
             ))}
           </View>
         </SafeAreaView>
       </ScrollView>
-    </View>
+    </ImageBackground>
   );
 };
 

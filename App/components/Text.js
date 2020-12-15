@@ -4,6 +4,7 @@ import {Text, StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
   base: {
     color: '#FFF',
+    fontFamily: 'Lato-Regular',
   },
   h1: {
     textAlign: 'center',
