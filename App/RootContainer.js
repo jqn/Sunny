@@ -13,32 +13,9 @@ const RootContainer = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
-          // headerStyle: {
-          //   backgroundColor: '#1E3FC2',
-          // },
-          // headerTintColor: '#FFF',
-          // headerTitleStyle: {
-          //   fontFamily: 'Lato-Bold',
-          //   fontSize: 22,
-          // },
           headerShown: false,
         }}>
-        <Stack.Screen
-          name="Details"
-          component={Details}
-          options={({navigation}) => ({
-            // title: 'Broomfield',
-            // headerRight: () => (
-            //   <MaterialCommunityIcons
-            //     name="magnify"
-            //     size={35}
-            //     color="#FFF"
-            //     onPress={() => navigation.navigate('Search')}
-            //     style={{paddingRight: 16}}
-            //   />
-            // ),
-          })}
-        />
+        <Stack.Screen name="Details" component={Details} />
         <Stack.Screen
           name="Search"
           component={Search}

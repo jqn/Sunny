@@ -34,11 +34,14 @@ const styles = StyleSheet.create({
   buttonText: {},
 });
 
-export const SearchBar = ({
-  onSearch,
-  searchButtonEnabled = false,
-  ...props
-}) => {
+const getColor = (enabled) => {
+  if (enabled) {
+    return {color: '#FFF'};
+  }
+  return {color: '#677AB9'};
+};
+
+export const SearchBar = ({onSearch, searchButtonEnabled, ...rest}) => {
   return (
     <View style={styles.container}>
       <MaterialCommunityIcons
@@ -50,15 +53,11 @@ export const SearchBar = ({
       <TextInput
         style={styles.input}
         keyboardType="number-pad"
-        {...props}
+        {...rest}
         selectionColor="#FFF"
       />
       <TouchableOpacity onPress={onSearch} disabled={!searchButtonEnabled}>
-        <Text
-          style={[
-            styles.buttonText,
-            {color: searchButtonEnabled ? '#FFF' : '#DDD'},
-          ]}>
+        <Text style={[styles.buttonText, getColor(searchButtonEnabled)]}>
           Get Weather
         </Text>
       </TouchableOpacity>
@@ -66,6 +65,14 @@ export const SearchBar = ({
   );
 };
 
-SearchBar.defaultProps = {};
+SearchBar.defaultProps = {
+  onSearch: () => {},
+  searchButtonEnabled: false,
+  rest: {},
+};
 
-SearchBar.propTypes = {};
+SearchBar.propTypes = {
+  onSearch: PropTypes.func,
+  searchButtonEnabled: PropTypes.bool,
+  rest: PropTypes.object,
+};
