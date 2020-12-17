@@ -6,8 +6,6 @@ import Search from './screens/Search';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
 const Stack = createStackNavigator();
 
 const RootContainer = () => {

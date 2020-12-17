@@ -45,13 +45,9 @@ const styles = StyleSheet.create({
     height: null,
     resizeMode: 'cover',
   },
-  textDecoration: {
-    // textShadowColor: '#000',
-    // textShadowRadius: 2,
-  },
   detailsContainer: {
     backgroundColor: 'rgba(0,0,0,0.2)',
-    paddingTop: 32,
+    paddingTop: 16,
     paddingHorizontal: 16,
   },
 });
@@ -85,7 +81,7 @@ const groupForecastByDay = (list) => {
   return formattedList;
 };
 
-const Details = () => {
+const Details = ({navigation}) => {
   const [forecast, setForecast] = useState([]);
 
   useEffect(() => {
@@ -98,7 +94,11 @@ const Details = () => {
       style={styles.container}
       imageStyle={styles.image}>
       <StatusBar barStyle="light-content" />
-      <Header headerTitle="Broomfield" />
+      <Header
+        headerTitle="Broomfield"
+        rightButton
+        onRightButtonPress={() => navigation.navigate('Search')}
+      />
       <ScrollView style={styles.detailsContainer}>
         <SafeAreaView>
           <WeatherIcon icon={'01d'} />

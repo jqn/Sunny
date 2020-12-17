@@ -3,21 +3,23 @@ import {FlatList, View, StatusBar, StyleSheet, Text} from 'react-native';
 
 import {SearchBar} from '../components/SearchBar';
 import {SearchItem} from '../components/List';
+import Header from '../components/Header';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     backgroundColor: '#263252',
-    paddingTop: 20,
-    paddingHorizontal: 16,
   },
   searchText: {
     marginHorizontal: 10,
     fontSize: 16,
-    color: '#aaa',
+    color: '#AAA',
     marginTop: 10,
     marginBottom: 5,
+  },
+  searchContainer: {
+    paddingTop: 20,
+    paddingHorizontal: 16,
   },
 });
 
@@ -35,36 +37,43 @@ const Search = ({navigation}) => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
-      <FlatList
-        data={recentSearch}
-        renderItem={({item}) => (
-          <SearchItem
-            name={item.name}
-            onPress={() =>
-              navigation.navigate('Details', {
-                lat: item.lat,
-                lon: item.lon,
-              })
-            }
-          />
-        )}
-        keyExtractor={(item) => item.id.toString()}
-        ListHeaderComponent={
-          <View>
-            <SearchBar
-              onSearch={() => {
-                navigation.navigate('Details', {
-                  zipcode: query,
-                });
-              }}
-              searchButtonEnabled={query.length >= 5}
-              placeholder="Zipcode"
-              onChangeText={(text) => setQuery(text)}
-            />
-            <Text style={styles.searchText}>Recent</Text>
-          </View>
-        }
+      <Header
+        headerTitle="Add Location"
+        leftButton
+        onLeftButtonPress={() => navigation.navigate('Details')}
       />
+      <View style={styles.searchContainer}>
+        <FlatList
+          data={recentSearch}
+          renderItem={({item}) => (
+            <SearchItem
+              name={item.name}
+              onPress={() =>
+                navigation.navigate('Details', {
+                  lat: item.lat,
+                  lon: item.lon,
+                })
+              }
+            />
+          )}
+          keyExtractor={(item) => item.id.toString()}
+          ListHeaderComponent={
+            <View>
+              <SearchBar
+                onSearch={() => {
+                  navigation.navigate('Details', {
+                    zipcode: query,
+                  });
+                }}
+                searchButtonEnabled={query.length >= 5}
+                placeholder="Zipcode"
+                onChangeText={(text) => setQuery(text)}
+              />
+              <Text style={styles.searchText}>Recent</Text>
+            </View>
+          }
+        />
+      </View>
     </View>
   );
 };

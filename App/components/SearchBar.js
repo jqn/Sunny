@@ -19,13 +19,14 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#ddd',
-    backgroundColor: '#eee',
+    borderColor: '#DDD',
+    backgroundColor: '#263252',
     alignItems: 'center',
   },
   input: {
     fontSize: 18,
     flex: 1,
+    color: '#FFF',
   },
   icon: {
     marginRight: 10,
@@ -42,16 +43,21 @@ export const SearchBar = ({
     <View style={styles.container}>
       <MaterialCommunityIcons
         name="magnify"
-        size={20}
-        color="rgba(0, 0, 0, 0.4)"
+        size={25}
+        color="#FFF"
         style={styles.icon}
       />
-      <TextInput style={styles.input} keyboardType="number-pad" {...props} />
+      <TextInput
+        style={styles.input}
+        keyboardType="number-pad"
+        {...props}
+        selectionColor="#FFF"
+      />
       <TouchableOpacity onPress={onSearch} disabled={!searchButtonEnabled}>
         <Text
           style={[
             styles.buttonText,
-            {color: searchButtonEnabled ? '#147efb' : 'rgba(0, 0, 0, 0.5)'},
+            {color: searchButtonEnabled ? '#FFF' : '#DDD'},
           ]}>
           Get Weather
         </Text>

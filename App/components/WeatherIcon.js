@@ -4,7 +4,7 @@ import {Image, View, StyleSheet} from 'react-native';
 import {getWeatherIcon} from '../utils/getWeatherIcon';
 
 const styles = StyleSheet.create({
-  container: {alignItems: 'center'},
+  container: {alignItems: 'center', paddingVertical: 24},
   icon: {
     width: 200,
     height: 200,

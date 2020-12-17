@@ -36,9 +36,9 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'rgba(0,0,0,0.2)',
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    alignItems: 'flex-end',
     paddingTop: 24,
+    paddingBottom: 8,
     borderBottomColor: '#FFF',
     borderBottomWidth: 1,
   },
@@ -50,20 +50,34 @@ const styles = StyleSheet.create({
   },
   leftButton: {
     paddingLeft: 4,
+    flex: 0.75,
+    alignItems: 'flex-start',
   },
   rightButton: {
     paddingRight: 4,
+    flex: 0.75,
+    alignItems: 'flex-end',
+  },
+  titleContainer: {alignItems: 'center', flex: 1.5},
+  buttonPlaceholder: {
+    flex: 0.75,
   },
 });
 
-const Header = ({headerTitle, leftButton, rightButton}) => {
+const Header = ({
+  headerTitle,
+  leftButton,
+  rightButton,
+  onLeftButtonPress,
+  onRightButtonPress,
+}) => {
   const layout = {
     width: useWindowDimensions().width,
     height: useWindowDimensions().height,
   };
   const defaultHeight = getDefaultHeaderHeight(
     layout,
-    StatusBar.currentHeight || 24,
+    StatusBar.currentHeight || 32,
   );
   console.log(
     '🚀 ~ file: Header.js ~ line 56 ~ Header ~ defaultHeight',
@@ -72,19 +86,43 @@ const Header = ({headerTitle, leftButton, rightButton}) => {
 
   return (
     <View style={[styles.container, {height: defaultHeight}]}>
-      <TouchableOpacity style={styles.leftButton}>
-        <Icon name="chevron-left" size={35} color="#FFF" />
-      </TouchableOpacity>
-      <Text style={styles.title}>{headerTitle}</Text>
-      <TouchableOpacity style={styles.rightButton}>
-        <Icon name="magnify" size={35} color="#FFF" />
-      </TouchableOpacity>
+      {leftButton ? (
+        <TouchableOpacity style={styles.leftButton} onPress={onLeftButtonPress}>
+          <Icon name="arrow-left" size={35} color="#FFF" />
+        </TouchableOpacity>
+      ) : (
+        <View style={styles.buttonPlaceholder} />
+      )}
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>{headerTitle}</Text>
+      </View>
+      {rightButton ? (
+        <TouchableOpacity
+          style={styles.rightButton}
+          onPress={onRightButtonPress}>
+          <Icon name="magnify" size={35} color="#FFF" />
+        </TouchableOpacity>
+      ) : (
+        <View style={styles.buttonPlaceholder} />
+      )}
     </View>
   );
 };
 
-Header.defaultProps = {};
+Header.defaultProps = {
+  headerTitle: '',
+  leftButton: false,
+  rightButton: false,
+  onLeftButtonPress: () => {},
+  onRightButtonPress: () => {},
+};
 
-Header.propTypes = {};
+Header.propTypes = {
+  headerTitle: PropTypes.string,
+  leftButton: PropTypes.bool,
+  rightButton: PropTypes.bool,
+  onLeftButtonPress: PropTypes.func,
+  onRightButtonPress: PropTypes.func,
+};
 
 export default Header;
