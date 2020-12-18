@@ -36,31 +36,6 @@ export const checkLocationPermissions = async () => {
     permissionsGranted = false;
   }
   return permissionsGranted;
-  // if (
-  //   statuses[locationWhenInUseStatus] === 'unavailable' ||
-  //   statuses[locationAlwaysStatus] === 'unavailable'
-  // ) {
-  //   return 'unavailable';
-  // }
-  // if (
-  //   statuses[locationWhenInUseStatus] === 'denied' ||
-  //   statuses[locationAlwaysStatus] === 'denied'
-  // ) {
-  //   return 'denied';
-  // }
-  // if (
-  //   statuses[locationWhenInUseStatus] === 'limited' ||
-  //   statuses[locationAlwaysStatus] === 'limited'
-  // ) {
-  //   return 'limited';
-  // }
-  // if (
-  //   statuses[locationWhenInUseStatus] === 'blocked' ||
-  //   statuses[locationAlwaysStatus] === 'blocked'
-  // ) {
-  //   return 'blocked';
-  // }
-  // return 'unknown';
 };
 
 export const requestLocationPermissions = async () => {
