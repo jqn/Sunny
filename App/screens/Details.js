@@ -18,6 +18,8 @@ import Header from '../components/Header';
 import forecastData from '../data/forecast';
 import getWeatherImage from '../utils/getWeatherImage';
 
+import {checkLocationPermissions} from '../Services/permissions';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -25,8 +27,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#1E3FC2',
   },
   forecastContainer: {
-    paddingHorizontal: 10,
-    marginTop: 20,
+    paddingHorizontal: 8,
+    marginTop: 8,
   },
   basicRow: {
     justifyContent: 'space-between',
@@ -37,7 +39,7 @@ const styles = StyleSheet.create({
   temp: {
     fontWeight: '700',
     fontFamily: 'Lato-Regular',
-    marginRight: 10,
+    marginRight: 8,
   },
   image: {
     flex: 1,
@@ -86,6 +88,20 @@ const Details = ({navigation}) => {
 
   useEffect(() => {
     setForecast(groupForecastByDay(forecastData));
+  }, []);
+
+  useEffect(() => {
+    const checkPermissions = async () => {
+      let status = await checkLocationPermissions();
+      if (status !== 'granted') {
+        // request permission
+        console.log(
+          '🚀 ~ file: Details.js ~ line 97 ~ checkPermissions ~ status',
+          status,
+        );
+      }
+    };
+    checkPermissions();
   }, []);
 
   return (

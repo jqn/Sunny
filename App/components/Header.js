@@ -75,13 +75,10 @@ const Header = ({
     width: useWindowDimensions().width,
     height: useWindowDimensions().height,
   };
+
   const defaultHeight = getDefaultHeaderHeight(
     layout,
-    StatusBar.currentHeight || 32,
-  );
-  console.log(
-    '🚀 ~ file: Header.js ~ line 56 ~ Header ~ defaultHeight',
-    StatusBar.currentHeight,
+    StatusBar.currentHeight || 26,
   );
 
   return (
