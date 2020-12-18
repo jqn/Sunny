@@ -37,10 +37,6 @@
 				</dict>
 			</dict>
 		</dict>
-		<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-		<string>Location is used to give you accurate weather and forecast for you current location.</string>
-		<key>NSLocationWhenInUseUsageDescription</key>
-		<string></string>
 		<key>UIAppFonts</key>
 		<array>
 			<string>AntDesign.ttf</string>
