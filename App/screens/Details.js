@@ -18,7 +18,10 @@ import Header from '../components/Header';
 import forecastData from '../data/forecast';
 import getWeatherImage from '../utils/getWeatherImage';
 
-import {checkLocationPermissions} from '../Services/permissions';
+import {
+  checkLocationPermissions,
+  requestLocationPermissions,
+} from '../Services/permissions';
 
 const styles = StyleSheet.create({
   container: {
@@ -93,15 +96,30 @@ const Details = ({navigation}) => {
   useEffect(() => {
     const checkPermissions = async () => {
       let status = await checkLocationPermissions();
-      if (status !== 'granted') {
-        // request permission
-        console.log(
-          '🚀 ~ file: Details.js ~ line 97 ~ checkPermissions ~ status',
-          status,
-        );
-      }
+      console.log(
+        '🚀 ~ file: Details.js ~ line 97 ~ checkPermissions ~ status',
+        status,
+      );
+      // if (status !== 'granted') {
+      //   // request permission
+      //   console.log(
+      //     '🚀 ~ file: Details.js ~ line 97 ~ checkPermissions ~ status',
+      //     status,
+      //   );
+      // }
     };
     checkPermissions();
+  }, []);
+
+  useEffect(() => {
+    const requestPermissions = async () => {
+      let results = await requestLocationPermissions();
+      // console.log(
+      //   '🚀 ~ file: Details.js ~ line 117 ~ requestPermissions ~ results',
+      //   results,
+      // );
+    };
+    requestPermissions();
   }, []);
 
   return (

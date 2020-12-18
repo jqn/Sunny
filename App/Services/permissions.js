@@ -4,6 +4,8 @@ import {
   PERMISSIONS,
   checkMultiple,
   requestMultiple,
+  RESULTS,
+  request,
 } from 'react-native-permissions';
 
 const PLATFORM_PERMISSIONS =
@@ -16,28 +18,61 @@ const PLATFORM_PERMISSIONS =
 
 const [locationWhenInUseStatus, locationAlwaysStatus] = PLATFORM_PERMISSIONS;
 
+// Permissions statuses
+// unavailable - This feature is not available (on this device / in this context)
+// denied - The permission has not been requested / is denied but can be requested
+// limited - The permission is granted but with limitations
+// blocked - The permission is denied and can not be requested anymore
+// granted - The permission is granted
 export const checkLocationPermissions = async () => {
   const statuses = await checkMultiple(PLATFORM_PERMISSIONS);
-  console.log(
-    '🚀 ~ file: permissions.js ~ line 21 ~ checkLocationPermissions ~ statuses',
-    statuses,
-  );
+  let permissionsGranted = false;
   if (
-    statuses[locationWhenInUseStatus] !== 'granted' ||
-    statuses[locationAlwaysStatus] !== 'granted'
+    statuses[locationWhenInUseStatus] === 'granted' ||
+    statuses[locationAlwaysStatus] === 'granted'
   ) {
-    return 'denied';
+    permissionsGranted = true;
+  } else {
+    permissionsGranted = false;
   }
-  return 'granted';
+  return permissionsGranted;
+  // if (
+  //   statuses[locationWhenInUseStatus] === 'unavailable' ||
+  //   statuses[locationAlwaysStatus] === 'unavailable'
+  // ) {
+  //   return 'unavailable';
+  // }
+  // if (
+  //   statuses[locationWhenInUseStatus] === 'denied' ||
+  //   statuses[locationAlwaysStatus] === 'denied'
+  // ) {
+  //   return 'denied';
+  // }
+  // if (
+  //   statuses[locationWhenInUseStatus] === 'limited' ||
+  //   statuses[locationAlwaysStatus] === 'limited'
+  // ) {
+  //   return 'limited';
+  // }
+  // if (
+  //   statuses[locationWhenInUseStatus] === 'blocked' ||
+  //   statuses[locationAlwaysStatus] === 'blocked'
+  // ) {
+  //   return 'blocked';
+  // }
+  // return 'unknown';
 };
 
 export const requestLocationPermissions = async () => {
   const results = await requestMultiple(PLATFORM_PERMISSIONS);
+  let permissionsGranted = false;
   if (
-    results[locationWhenInUseStatus] !== 'granted' ||
-    results[locationAlwaysStatus] !== 'granted'
+    results[locationWhenInUseStatus] === 'granted' ||
+    results[locationAlwaysStatus] === 'granted'
   ) {
-    return 'denied';
+    permissionsGranted = true;
+  } else {
+    permissionsGranted = false;
   }
-  return 'granted';
+  return permissionsGranted;
 };
