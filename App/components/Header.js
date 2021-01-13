@@ -21,7 +21,7 @@ export const getDefaultHeaderHeight = (layout, statusBarHeight) => {
     if (isLandscape && !Platform.isPad) {
       headerHeight = 32;
     } else {
-      headerHeight = 44;
+      headerHeight = 52;
     }
   } else if (Platform.OS === 'android') {
     headerHeight = 56;

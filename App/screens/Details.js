@@ -14,6 +14,7 @@ import {WeatherIcon} from '../components/WeatherIcon';
 import {BasicRow} from '../components/List';
 import {H1, H2, P} from '../components/Text';
 import Header from '../components/Header';
+import MaterialAlert from '../components/MaterialAlert';
 
 import forecastData from '../data/forecast';
 import getWeatherImage from '../utils/getWeatherImage';
@@ -88,6 +89,8 @@ const groupForecastByDay = (list) => {
 
 const Details = ({navigation}) => {
   const [forecast, setForecast] = useState([]);
+  const [locationPermission, setLocationPermission] = useState(null);
+  const [alertVisible, setAlertVisible] = useState(false);
 
   useEffect(() => {
     setForecast(groupForecastByDay(forecastData));
@@ -96,17 +99,7 @@ const Details = ({navigation}) => {
   useEffect(() => {
     const checkPermissions = async () => {
       let status = await checkLocationPermissions();
-      console.log(
-        '🚀 ~ file: Details.js ~ line 97 ~ checkPermissions ~ status',
-        status,
-      );
-      // if (status !== 'granted') {
-      //   // request permission
-      //   console.log(
-      //     '🚀 ~ file: Details.js ~ line 97 ~ checkPermissions ~ status',
-      //     status,
-      //   );
-      // }
+      setLocationPermission(status);
     };
     checkPermissions();
   }, []);
@@ -114,13 +107,15 @@ const Details = ({navigation}) => {
   useEffect(() => {
     const requestPermissions = async () => {
       let results = await requestLocationPermissions();
-      // console.log(
-      //   '🚀 ~ file: Details.js ~ line 117 ~ requestPermissions ~ results',
-      //   results,
-      // );
+      if (!results) {
+        console.log('Please enable permissions');
+        setAlertVisible(true);
+      }
     };
-    requestPermissions();
-  }, []);
+    if (locationPermission === false) {
+      requestPermissions();
+    }
+  }, [locationPermission]);
 
   return (
     <ImageBackground
@@ -161,6 +156,19 @@ const Details = ({navigation}) => {
               </BasicRow>
             ))}
           </View>
+          <MaterialAlert
+            visible={alertVisible}
+            cancelTitle="Cancel"
+            confirmTitle="OK"
+            onCancelPress={() => {
+              setAlertVisible(false);
+            }}
+            onConfirmPress={() => {
+              setAlertVisible(false);
+            }}
+            title="Enable Location"
+            message="Help us bring you local weather. Please give us access to your location."
+          />
         </SafeAreaView>
       </ScrollView>
     </ImageBackground>

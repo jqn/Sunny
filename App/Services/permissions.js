@@ -4,8 +4,6 @@ import {
   PERMISSIONS,
   checkMultiple,
   requestMultiple,
-  RESULTS,
-  request,
 } from 'react-native-permissions';
 
 const PLATFORM_PERMISSIONS =
@@ -26,7 +24,7 @@ const [locationWhenInUseStatus, locationAlwaysStatus] = PLATFORM_PERMISSIONS;
 // granted - The permission is granted
 export const checkLocationPermissions = async () => {
   const statuses = await checkMultiple(PLATFORM_PERMISSIONS);
-  let permissionsGranted = false;
+  let permissionsGranted;
   if (
     statuses[locationWhenInUseStatus] === 'granted' ||
     statuses[locationAlwaysStatus] === 'granted'
@@ -40,7 +38,7 @@ export const checkLocationPermissions = async () => {
 
 export const requestLocationPermissions = async () => {
   const results = await requestMultiple(PLATFORM_PERMISSIONS);
-  let permissionsGranted = false;
+  let permissionsGranted;
   if (
     results[locationWhenInUseStatus] === 'granted' ||
     results[locationAlwaysStatus] === 'granted'
