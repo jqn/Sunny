@@ -108,7 +108,6 @@ const Details = ({navigation}) => {
     const requestPermissions = async () => {
       let results = await requestLocationPermissions();
       if (!results) {
-        console.log('Please enable permissions');
         setAlertVisible(true);
       }
     };
@@ -167,7 +166,7 @@ const Details = ({navigation}) => {
               setAlertVisible(false);
             }}
             title="Enable Location"
-            message="Help us bring you local weather. Please give us access to your location."
+            message="Help us bring you the local weather. Please give us access to your location."
           />
         </SafeAreaView>
       </ScrollView>
