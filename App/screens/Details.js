@@ -15,6 +15,7 @@ import {BasicRow} from '../components/List';
 import {H1, H2, P} from '../components/Text';
 import Header from '../components/Header';
 import MaterialAlert from '../components/MaterialAlert';
+import GeoLoader from '../components/GeoLoader';
 
 import forecastData from '../data/forecast';
 import getWeatherImage from '../utils/getWeatherImage';
@@ -23,8 +24,6 @@ import {
   checkLocationPermissions,
   requestLocationPermissions,
 } from '../services/permissions';
-
-import useGeoPosition from '../hooks/useGeoPosition';
 
 const styles = StyleSheet.create({
   container: {
@@ -93,7 +92,7 @@ const Details = ({navigation}) => {
   const [forecast, setForecast] = useState([]);
   const [locationPermission, setLocationPermission] = useState(null);
   const [alertVisible, setAlertVisible] = useState(false);
-  const {status, position, error, runGeolocation} = useGeoPosition();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setForecast(groupForecastByDay(forecastData));
@@ -101,8 +100,8 @@ const Details = ({navigation}) => {
 
   useEffect(() => {
     const checkPermissions = async () => {
-      let status = await checkLocationPermissions();
-      setLocationPermission(status);
+      let locationStatus = await checkLocationPermissions();
+      setLocationPermission(locationStatus);
     };
     checkPermissions();
   }, []);
@@ -118,6 +117,10 @@ const Details = ({navigation}) => {
       requestPermissions();
     }
   }, [locationPermission]);
+
+  if (isLoading) {
+    return <GeoLoader loaderText="Capturing Location" appearance="light" />;
+  }
 
   return (
     <ImageBackground

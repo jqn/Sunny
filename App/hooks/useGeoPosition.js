@@ -46,20 +46,10 @@ const useGeoPosition = () => {
     const fetchLocation = async () => {
       let status = await checkLocationPermissions();
 
-      if (status === 'unavailable') {
+      if (!status) {
         dispatch({
           type: 'error',
-          error: new Error('Geolocation is not supported'),
-        });
-        return;
-      }
-
-      if (status === 'denied' || status === 'blocked') {
-        dispatch({
-          type: 'error',
-          error: new Error(
-            "Couldn't capture your Location. Please allow geolocation from settings",
-          ),
+          error: new Error('Error capturing location'),
         });
         return;
       }
