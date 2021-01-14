@@ -22,7 +22,7 @@ import getWeatherImage from '../utils/getWeatherImage';
 import {
   checkLocationPermissions,
   requestLocationPermissions,
-} from '../Services/permissions';
+} from '../services/permissions';
 
 import useGeoPosition from '../hooks/useGeoPosition';
 
