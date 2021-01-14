@@ -24,6 +24,8 @@ import {
   requestLocationPermissions,
 } from '../Services/permissions';
 
+import useGeoPosition from '../hooks/useGeoPosition';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -91,6 +93,7 @@ const Details = ({navigation}) => {
   const [forecast, setForecast] = useState([]);
   const [locationPermission, setLocationPermission] = useState(null);
   const [alertVisible, setAlertVisible] = useState(false);
+  const {status, position, error, runGeolocation} = useGeoPosition();
 
   useEffect(() => {
     setForecast(groupForecastByDay(forecastData));

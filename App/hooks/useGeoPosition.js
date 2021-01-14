@@ -1,10 +1,10 @@
-import geoPositionReducer from '../Reducers/geoPositionReducer';
+import geoPositionReducer from '../reducers/geoPositionReducer';
 import {useEffect, useReducer} from 'react';
 
 import Geolocation from 'react-native-geolocation-service';
-import Geocoder from 'react-native-geocoder-reborn';
+import Geocoder from '@timwangdev/react-native-geocoder';
 
-import {checkLocationPermissions} from '../Services/permissions';
+import {checkLocationPermissions} from '../services/permissions';
 
 const geoLocate = () => {
   return new Promise((resolve, reject) => {
