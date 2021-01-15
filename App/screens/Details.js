@@ -119,7 +119,13 @@ const Details = ({navigation}) => {
   }, [locationPermission]);
 
   if (isLoading) {
-    return <GeoLoader loaderText="Capturing Location" appearance="light" />;
+    return (
+      <GeoLoader
+        loaderText="Capturing Location"
+        appearance="light"
+        loadingCallback={() => setIsLoading(false)}
+      />
+    );
   }
 
   return (
