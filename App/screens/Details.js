@@ -16,6 +16,7 @@ import {H1, H2, P} from '../components/Text';
 import Header from '../components/Header';
 import MaterialAlert from '../components/MaterialAlert';
 import GeoLoader from '../components/GeoLoader';
+import PermissionsLoader from '../components/PermissionsLoader';
 
 import forecastData from '../data/forecast';
 import getWeatherImage from '../utils/getWeatherImage';
@@ -100,30 +101,43 @@ const Details = ({navigation}) => {
 
   useEffect(() => {
     const checkPermissions = async () => {
-      let locationStatus = await checkLocationPermissions();
-      setLocationPermission(locationStatus);
+      let permissionStatus = await checkLocationPermissions();
+      setLocationPermission(permissionStatus);
+      setIsLoading(false);
     };
     checkPermissions();
   }, []);
 
-  useEffect(() => {
-    const requestPermissions = async () => {
-      let results = await requestLocationPermissions();
-      if (!results) {
-        setAlertVisible(true);
-      }
-    };
-    if (locationPermission === false) {
-      requestPermissions();
-    }
-  }, [locationPermission]);
+  // useEffect(() => {
+  //   const requestPermissions = async () => {
+  //     let results = await requestLocationPermissions();
+  //     if (!results) {
+  //       setAlertVisible(true);
+  //     }
+  //   };
+  //   if (locationPermission === false) {
+  //     requestPermissions();
+  //   }
+  // }, [locationPermission]);
 
   if (isLoading) {
     return (
       <GeoLoader
-        loaderText="Capturing Location"
+        // loaderText="Capturing Location"
+        permission={locationPermission}
         appearance="light"
         loadingCallback={() => setIsLoading(false)}
+      />
+    );
+  }
+
+  if (!locationPermission) {
+    return (
+      <PermissionsLoader
+        // loaderText="Capturing Location"
+        permission={locationPermission}
+        appearance="light"
+        loadingCallback={(value) => setLocationPermission(true)}
       />
     );
   }
