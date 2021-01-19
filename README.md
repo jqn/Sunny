@@ -1,4 +1,4 @@
-# Sunny Side Up
+# Sunny Side App
 
 A simple cross platform (iOS and Android) React Native weather app.
 

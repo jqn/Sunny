@@ -1,14 +1,5 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {
-  ActivityIndicator,
-  Button,
-  Linking,
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import React, {useState, useCallback} from 'react';
+import {Linking, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import PropTypes from 'prop-types';
 
 import {requestLocationPermissions} from '../services/permissions';
@@ -36,13 +27,6 @@ const styles = StyleSheet.create({
     fontSize: 23,
     textAlign: 'left',
     fontFamily: 'Lato-Regular',
-  },
-  loaderText: {
-    color: '#FFF',
-    fontSize: 23,
-    textAlign: 'center',
-    fontFamily: 'Lato-Regular',
-    paddingTop: 8,
   },
   button: {
     backgroundColor: '#FFDE59',
@@ -91,7 +75,6 @@ const styles = StyleSheet.create({
 });
 
 const PermissionsLoader = ({appearance, loadingCallback, permission}) => {
-  const [message, setMessage] = useState('Loading...');
   const [allowed, setAllowed] = useState(permission);
 
   const getColorScheme = () => {
@@ -109,14 +92,10 @@ const PermissionsLoader = ({appearance, loadingCallback, permission}) => {
     };
   };
 
-  const {containerColor, textColor, iconColor} = getColorScheme();
+  const {containerColor, textColor} = getColorScheme();
 
   const requestPermissions = async () => {
     let permissionStatus = await requestLocationPermissions();
-    console.log(
-      '🚀 ~ file: PermissionsLoader.js ~ line 116 ~ requestPermissions ~ permissionStatus',
-      permissionStatus,
-    );
 
     if (!permissionStatus) {
       setAllowed('rejected');
@@ -147,7 +126,7 @@ const PermissionsLoader = ({appearance, loadingCallback, permission}) => {
           </View>
           <View style={styles.titleContainer}>
             <Text style={[styles.largeTitle, textColor]}>
-              Sunny{'\n'}Side{'\n'}Up
+              Sunny{'\n'}Side{'\n'}App
             </Text>
           </View>
           <View style={styles.messageContainer}>
@@ -181,7 +160,7 @@ const PermissionsLoader = ({appearance, loadingCallback, permission}) => {
         </View>
         <View style={styles.titleContainer}>
           <Text style={[styles.largeTitle, textColor]}>
-            Sunny{'\n'}Side{'\n'}Up
+            Sunny{'\n'}Side{'\n'}App
           </Text>
         </View>
         <View style={styles.messageContainer}>
@@ -206,15 +185,11 @@ const PermissionsLoader = ({appearance, loadingCallback, permission}) => {
 
 PermissionsLoader.defaultProps = {
   appearance: 'dark',
-  color: '#FFF',
-  loaderText: 'Loading...',
   permission: false,
 };
 
 PermissionsLoader.propTypes = {
   appearance: PropTypes.string,
-  color: PropTypes.string,
-  loaderText: PropTypes.string,
 };
 
 export default PermissionsLoader;

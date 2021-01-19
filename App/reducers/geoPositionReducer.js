@@ -1,6 +1,6 @@
 // Original example
 // https://kentcdodds.com/blog/stop-using-isloading-booleans
-
+// https://codesandbox.io/s/dark-lake-r07lr?file=/src/index.js:1256-1261
 const geoPositionReducer = (state, action) => {
   switch (action.type) {
     case 'error': {

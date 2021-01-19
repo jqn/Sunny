@@ -22,6 +22,7 @@ const [locationWhenInUseStatus, locationAlwaysStatus] = PLATFORM_PERMISSIONS;
 // limited - The permission is granted but with limitations
 // blocked - The permission is denied and can not be requested anymore
 // granted - The permission is granted
+
 export const checkLocationPermissions = async () => {
   const statuses = await checkMultiple(PLATFORM_PERMISSIONS);
   let permissionsGranted;

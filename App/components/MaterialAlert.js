@@ -26,13 +26,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
-  landscape: {alignSelf: 'center', width: '50%'},
   message: {
     fontFamily: 'System',
     fontSize: 17,
     lineHeight: 22,
   },
-  portrait: {alignSelf: 'center'},
   title: {
     fontFamily: 'System',
     fontSize: 22,

@@ -21,10 +21,7 @@ import PermissionsLoader from '../components/PermissionsLoader';
 import forecastData from '../data/forecast';
 import getWeatherImage from '../utils/getWeatherImage';
 
-import {
-  checkLocationPermissions,
-  requestLocationPermissions,
-} from '../services/permissions';
+import {checkLocationPermissions} from '../services/permissions';
 
 const styles = StyleSheet.create({
   container: {
@@ -94,6 +91,7 @@ const Details = ({navigation}) => {
   const [locationPermission, setLocationPermission] = useState(null);
   const [alertVisible, setAlertVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [position, setPosition] = useState({zipCode: '', city: ''});
 
   useEffect(() => {
     setForecast(groupForecastByDay(forecastData));
@@ -102,31 +100,27 @@ const Details = ({navigation}) => {
   useEffect(() => {
     const checkPermissions = async () => {
       let permissionStatus = await checkLocationPermissions();
+      console.log(
+        '🚀 ~ file: Details.js ~ line 105 ~ checkPermissions ~ permissionStatus',
+        permissionStatus,
+      );
       setLocationPermission(permissionStatus);
-      setIsLoading(false);
+      if (!permissionStatus) {
+        setIsLoading(false);
+      }
     };
     checkPermissions();
   }, []);
 
-  // useEffect(() => {
-  //   const requestPermissions = async () => {
-  //     let results = await requestLocationPermissions();
-  //     if (!results) {
-  //       setAlertVisible(true);
-  //     }
-  //   };
-  //   if (locationPermission === false) {
-  //     requestPermissions();
-  //   }
-  // }, [locationPermission]);
-
   if (isLoading) {
     return (
       <GeoLoader
-        // loaderText="Capturing Location"
         permission={locationPermission}
         appearance="light"
-        loadingCallback={() => setIsLoading(false)}
+        locationCallback={(location) => {
+          setPosition(location);
+          setIsLoading(false);
+        }}
       />
     );
   }
@@ -134,10 +128,12 @@ const Details = ({navigation}) => {
   if (!locationPermission) {
     return (
       <PermissionsLoader
-        // loaderText="Capturing Location"
         permission={locationPermission}
         appearance="light"
-        loadingCallback={(value) => setLocationPermission(true)}
+        loadingCallback={(value) => {
+          setLocationPermission(true);
+          setIsLoading(true);
+        }}
       />
     );
   }
@@ -149,7 +145,7 @@ const Details = ({navigation}) => {
       imageStyle={styles.image}>
       <StatusBar barStyle="light-content" />
       <Header
-        headerTitle="Broomfield"
+        headerTitle={position.city}
         rightButton
         onRightButtonPress={() => navigation.navigate('Search')}
       />

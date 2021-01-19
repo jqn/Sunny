@@ -45,11 +45,6 @@ const useGeoPosition = () => {
   useEffect(() => {
     const fetchLocation = async () => {
       let status = await checkLocationPermissions();
-      console.log(
-        '🚀 ~ file: useGeoPosition.js ~ line 48 ~ fetchLocation ~ status',
-        status,
-      );
-
       if (!status) {
         dispatch({
           type: 'error',
