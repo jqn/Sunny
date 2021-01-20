@@ -1,12 +1,11 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, Image, StyleSheet, Text, View} from 'react-native';
 import PropTypes from 'prop-types';
 
 import useGeoPosition from '../hooks/useGeoPosition';
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
     bottom: 0,
     left: 0,
     position: 'absolute',
@@ -17,8 +16,30 @@ const styles = StyleSheet.create({
   messageText: {
     color: '#FFF',
     fontSize: 23,
-    textAlign: 'left',
+    textAlign: 'center',
     fontFamily: 'Lato-Regular',
+    paddingTop: 8,
+  },
+  headerImage: {resizeMode: 'cover', width: 300, height: 300},
+  content: {
+    flex: 1,
+    padding: 16,
+  },
+  imageContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+  },
+  largeTitle: {
+    color: '#FFF',
+    fontSize: 48,
+    paddingBottom: 16,
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    fontFamily: 'Lato-Black',
+  },
+  titleContainer: {
+    alignItems: 'flex-start',
   },
 });
 
@@ -51,10 +72,6 @@ const GeoLoader = ({appearance, locationCallback}) => {
   }, [locationCallback, position]);
 
   useEffect(() => {
-    console.log(
-      '🚀 ~ file: GeoLoader.js ~ line 141 ~ useEffect ~ status',
-      status,
-    );
     if (status === 'idle' || status === 'pending') {
       setMessage('Capturing location');
     }
@@ -72,7 +89,18 @@ const GeoLoader = ({appearance, locationCallback}) => {
   if (status === 'idle' || status === 'pending') {
     return (
       <View style={[styles.container, containerColor]}>
+        <View style={styles.imageContainer}>
+          <Image
+            style={styles.headerImage}
+            source={require('../images/geolocation.png')}
+          />
+        </View>
         <View style={styles.content}>
+          <View style={styles.titleContainer}>
+            <Text style={[styles.largeTitle, textColor]}>
+              Sunny{'\n'}Side{'\n'}App
+            </Text>
+          </View>
           <ActivityIndicator color={iconColor} size="large" />
           <Text style={[styles.messageText, textColor]}>{message}</Text>
         </View>
@@ -80,14 +108,42 @@ const GeoLoader = ({appearance, locationCallback}) => {
     );
   }
 
-  return (
-    <View style={[styles.container, containerColor]}>
-      <View style={styles.content}>
-        <ActivityIndicator color={iconColor} size="large" />
-        <Text style={[styles.messageText, textColor]}>{error.message}</Text>
+  if (status === 'resolved') {
+    return (
+      <View style={[styles.container, containerColor]}>
+        <View style={styles.imageContainer}>
+          <Image
+            style={styles.headerImage}
+            source={require('../images/geolocation.png')}
+          />
+        </View>
+        <View style={styles.content}>
+          <View style={styles.titleContainer}>
+            <Text style={[styles.largeTitle, textColor]}>
+              Sunny{'\n'}Side{'\n'}App
+            </Text>
+          </View>
+          <Text style={[styles.messageText, textColor]}>
+            {position.locality}
+          </Text>
+          <Text style={[styles.messageText, textColor]}>
+            {position.postalCode}
+          </Text>
+        </View>
       </View>
-    </View>
-  );
+    );
+  }
+
+  if (status === 'rejected') {
+    return (
+      <View style={[styles.container, containerColor]}>
+        <View style={styles.content}>
+          <ActivityIndicator color={iconColor} size="large" />
+          <Text style={[styles.messageText, textColor]}>{error.message}</Text>
+        </View>
+      </View>
+    );
+  }
 };
 
 GeoLoader.defaultProps = {
