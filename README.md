@@ -2,6 +2,10 @@
 
 A simple cross platform (iOS and Android) React Native weather app.
 
+![Reference Designs Permission Screens](./assets/images/permissions.png)
+
+![Reference Designs Location Screens](./assets/images/location.png)
+
 ### Features
 
 - Custom Fonts: Audiowide and Lato
