@@ -17,6 +17,11 @@ A simple cross platform (iOS and Android) React Native weather app.
 
 - `git clone https://github.com/jqn/Sunny.git`
 - `yarn install`/`npm install`
+- `npx pod-install`
+
+### Requirements
+
+- [OpenWeather API Key](https://openweathermap.org/)
 
 ### Run instructions for iOS:
 

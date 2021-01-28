@@ -5771,6 +5771,11 @@
   "resolved" "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
   "version" "16.13.1"
 
+"react-native-config@^1.4.2":
+  "integrity" "sha512-iTvCvThvFTH7SdiBcsxYtpLy86zglsh51ZBqFPPZ75tdrQMdlRnDNnb86kNjQf03KT0qs1nCMLRejfPMIim8iA=="
+  "resolved" "https://registry.npmjs.org/react-native-config/-/react-native-config-1.4.2.tgz"
+  "version" "1.4.2"
+
 "react-native-geolocation-service@^5.1.1":
   "integrity" "sha512-HrnOW2x3yuMSc5IIHQJ7GOnpKDhMRyk6SxdHTcuUB16tpadusCNCvrGGQtpkWV6WACp3IjJEIUKclxz/84l1Lg=="
   "resolved" "https://registry.npmjs.org/react-native-geolocation-service/-/react-native-geolocation-service-5.1.1.tgz"
@@ -5828,7 +5833,7 @@
     "prop-types" "^15.7.2"
     "yargs" "^15.0.2"
 
-"react-native-windows@>=0.62.0":
+"react-native-windows@>=0.61", "react-native-windows@>=0.62.0":
   "integrity" "sha1-4qzQPfAL3iX/LJQcB/91cSPHvxM="
   "resolved" "https://registry.npmjs.org/react-native-windows/-/react-native-windows-1.0.0.tgz"
   "version" "1.0.0"

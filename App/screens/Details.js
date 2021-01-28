@@ -15,11 +15,14 @@ import {BasicRow} from '../components/List';
 import {H1, H2, P} from '../components/Text';
 import Header from '../components/Header';
 import MaterialAlert from '../components/MaterialAlert';
-import GeoLoader from '../components/GeoLoader';
 import PermissionsLoader from '../components/PermissionsLoader';
+import GeoLoader from '../components/GeoLoader';
+import Loader from '../components/Loader';
 
 import forecastData from '../data/forecast';
+import weatherData from '../data/weather';
 import getWeatherImage from '../utils/getWeatherImage';
+import {weatherApi} from '../services/wheaterAPI';
 
 import {checkLocationPermissions} from '../services/permissions';
 
@@ -88,55 +91,106 @@ const groupForecastByDay = (list) => {
 
 const Details = ({navigation}) => {
   const [forecast, setForecast] = useState([]);
+  const [currentWeather, setCurrentWeather] = useState({});
   const [locationPermission, setLocationPermission] = useState(null);
   const [alertVisible, setAlertVisible] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [position, setPosition] = useState({zipCode: '', city: ''});
-
-  useEffect(() => {
-    setForecast(groupForecastByDay(forecastData));
-  }, []);
+  const [loadingPermissions, setLoadingPermissions] = useState(true);
+  const [loadingLocation, setLoadingLocation] = useState(true);
+  const [loadingWeather, setLoadingWeather] = useState(true);
+  const [loadingForecast, setLoadingForecast] = useState(true);
 
   useEffect(() => {
     const checkPermissions = async () => {
       let permissionStatus = await checkLocationPermissions();
-      console.log(
-        '🚀 ~ file: Details.js ~ line 105 ~ checkPermissions ~ permissionStatus',
-        permissionStatus,
-      );
+
       setLocationPermission(permissionStatus);
-      if (!permissionStatus) {
-        setIsLoading(false);
-      }
+      setLoadingPermissions(false);
     };
     checkPermissions();
   }, []);
 
-  if (isLoading) {
+  useEffect(() => {
+    let getWeather = async () => {
+      let localWeather = await weatherApi('/weather', {
+        zipcode: position.zipCode,
+      });
+      console.log(
+        '🚀 ~ file: Details.js ~ line 121 ~ getWeather ~ localWeather',
+        localWeather,
+      );
+
+      if (localWeather.cod === '200') {
+        setCurrentWeather(localWeather);
+        setLoadingWeather(false);
+      }
+    };
+    if (position.zipCode) {
+      getWeather();
+    }
+  }, [position, loadingWeather]);
+
+  useEffect(() => {
+    let getForecast = async () => {
+      let localForecast = await weatherApi('/forecast', {
+        zipcode: position.zipCode,
+      });
+      console.log(
+        '🚀 ~ file: Details.js ~ line 139 ~ getForecast ~ localForecast',
+        localForecast,
+      );
+      if (localForecast.cod === '200') {
+        setForecast(groupForecastByDay(localForecast.list));
+        setLoadingWeather(false);
+        setLoadingForecast(false);
+      }
+    };
+    if (currentWeather.main) {
+      getForecast();
+    }
+  }, [currentWeather, position.zipCode]);
+
+  if (loadingPermissions) {
+    return (
+      <PermissionsLoader
+        permission={locationPermission}
+        appearance="light"
+        loadingCallback={(value) => {
+          setLoadingPermissions(false);
+        }}
+      />
+    );
+  }
+
+  if (loadingLocation) {
     return (
       <GeoLoader
         permission={locationPermission}
         appearance="light"
         locationCallback={(location) => {
           setPosition(location);
-          setIsLoading(false);
+          setLoadingLocation(false);
         }}
       />
     );
   }
 
-  if (!locationPermission) {
-    return (
-      <PermissionsLoader
-        permission={locationPermission}
-        appearance="light"
-        loadingCallback={(value) => {
-          setLocationPermission(true);
-          setIsLoading(true);
-        }}
-      />
-    );
+  if (loadingWeather) {
+    return <Loader />;
   }
+
+  if (loadingForecast) {
+    return <Loader />;
+  }
+
+  if (!currentWeather.main) {
+    console.log(
+      '🚀 ~ file: Details.js ~ line 192 ~ Details ~ currentWeather',
+      currentWeather,
+    );
+    return <Loader />;
+  }
+  const {weather, main} = currentWeather;
 
   return (
     <ImageBackground
@@ -151,14 +205,19 @@ const Details = ({navigation}) => {
       />
       <ScrollView style={styles.detailsContainer}>
         <SafeAreaView>
-          <WeatherIcon icon={'01d'} />
-          <H1 style={styles.textDecoration}>38°</H1>
+          <WeatherIcon icon={weather[0].icon} />
+          <H1 style={styles.textDecoration}>{`${Math.round(main.temp)}°`}</H1>
           <BasicRow>
-            <H2 style={styles.textDecoration}>{'Humidity: 11%'}</H2>
+            <H2
+              style={styles.textDecoration}>{`Humidity: ${main.humidity}%`}</H2>
           </BasicRow>
           <BasicRow>
-            <H2 style={styles.textDecoration}>{'Low: 34°'}</H2>
-            <H2 style={styles.textDecoration}>{'High: 45°'}</H2>
+            <H2 style={styles.textDecoration}>{`Low: ${Math.round(
+              main.temp_min,
+            )}°`}</H2>
+            <H2 style={styles.textDecoration}>{`High: ${Math.round(
+              main.temp_max,
+            )}°`}</H2>
           </BasicRow>
           <View style={styles.forecastContainer}>
             {forecast.map((day) => (
