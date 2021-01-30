@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   ImageBackground,
   SafeAreaView,
@@ -18,11 +18,16 @@ import MaterialAlert from '../components/MaterialAlert';
 import PermissionsLoader from '../components/PermissionsLoader';
 import GeoLoader from '../components/GeoLoader';
 import Loader from '../components/Loader';
+import ForeCast from '../components/ForeCast';
 
 import forecastData from '../data/forecast';
-import weatherData from '../data/weather';
+// import weatherData from '../data/weather';
 import getWeatherImage from '../utils/getWeatherImage';
-import {weatherApi} from '../services/wheaterAPI';
+// import {weatherApi} from '../services/weatherAPI';
+
+import useWeatherAPI from '../hooks/useWeatherAPI';
+import useForecastAPI from '../hooks/useForecastAPI';
+import useGeoPosition from '../hooks/useGeoPosition';
 
 import {checkLocationPermissions} from '../services/permissions';
 
@@ -32,21 +37,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#1E3FC2',
   },
-  forecastContainer: {
-    paddingHorizontal: 8,
-    marginTop: 8,
-  },
-  basicRow: {
-    justifyContent: 'space-between',
-  },
-  group: {
-    flexDirection: 'row',
-  },
-  temp: {
-    fontWeight: '700',
-    fontFamily: 'Lato-Regular',
-    marginRight: 8,
-  },
+  // forecastContainer: {
+  //   paddingHorizontal: 8,
+  //   marginTop: 8,
+  // },
+  // basicRow: {
+  //   justifyContent: 'space-between',
+  // },
+  // group: {
+  //   flexDirection: 'row',
+  // },
+  // temp: {
+  //   fontWeight: '700',
+  //   fontFamily: 'Lato-Regular',
+  //   marginRight: 8,
+  // },
   image: {
     flex: 1,
     width: null,
@@ -90,107 +95,62 @@ const groupForecastByDay = (list) => {
 };
 
 const Details = ({navigation}) => {
-  const [forecast, setForecast] = useState([]);
-  const [currentWeather, setCurrentWeather] = useState({});
-  const [locationPermission, setLocationPermission] = useState(null);
-  const [alertVisible, setAlertVisible] = useState(false);
-  const [position, setPosition] = useState({zipCode: '', city: ''});
-  const [loadingPermissions, setLoadingPermissions] = useState(true);
-  const [loadingLocation, setLoadingLocation] = useState(true);
-  const [loadingWeather, setLoadingWeather] = useState(true);
-  const [loadingForecast, setLoadingForecast] = useState(true);
+  const [permissions, setPermissions] = useState(null);
+  const [deviceLocation, setDeviceLocation] = useState(null);
+  const {weatherData, error, isLoading, setPath} = useWeatherAPI();
 
   useEffect(() => {
     const checkPermissions = async () => {
-      let permissionStatus = await checkLocationPermissions();
+      let locationAllowed = await checkLocationPermissions();
 
-      setLocationPermission(permissionStatus);
-      setLoadingPermissions(false);
+      setPermissions(locationAllowed);
     };
     checkPermissions();
   }, []);
 
   useEffect(() => {
-    let getWeather = async () => {
-      let localWeather = await weatherApi('/weather', {
-        zipcode: position.zipCode,
-      });
-      console.log(
-        '🚀 ~ file: Details.js ~ line 121 ~ getWeather ~ localWeather',
-        localWeather,
-      );
-
-      if (localWeather.cod === '200') {
-        setCurrentWeather(localWeather);
-        setLoadingWeather(false);
-      }
-    };
-    if (position.zipCode) {
-      getWeather();
+    if (deviceLocation !== null) {
+      setPath({endpoint: '/weather', zipCode: deviceLocation.zipCode});
     }
-  }, [position, loadingWeather]);
+  }, [deviceLocation, setPath]);
 
-  useEffect(() => {
-    let getForecast = async () => {
-      let localForecast = await weatherApi('/forecast', {
-        zipcode: position.zipCode,
-      });
-      console.log(
-        '🚀 ~ file: Details.js ~ line 139 ~ getForecast ~ localForecast',
-        localForecast,
-      );
-      if (localForecast.cod === '200') {
-        setForecast(groupForecastByDay(localForecast.list));
-        setLoadingWeather(false);
-        setLoadingForecast(false);
-      }
-    };
-    if (currentWeather.main) {
-      getForecast();
-    }
-  }, [currentWeather, position.zipCode]);
+  if (permissions === null) {
+    return <Loader />;
+  }
 
-  if (loadingPermissions) {
+  if (permissions === false) {
     return (
       <PermissionsLoader
-        permission={locationPermission}
+        permission={permissions}
         appearance="light"
         loadingCallback={(value) => {
-          setLoadingPermissions(false);
+          setPermissions(value);
         }}
       />
     );
   }
 
-  if (loadingLocation) {
+  if (deviceLocation === null && isLoading) {
     return (
       <GeoLoader
-        permission={locationPermission}
+        permission={permissions}
         appearance="light"
         locationCallback={(location) => {
-          setPosition(location);
-          setLoadingLocation(false);
+          setDeviceLocation(location);
         }}
       />
     );
   }
 
-  if (loadingWeather) {
+  if (error) {
+    return <View />;
+  }
+
+  if (!weatherData && isLoading) {
     return <Loader />;
   }
 
-  if (loadingForecast) {
-    return <Loader />;
-  }
-
-  if (!currentWeather.main) {
-    console.log(
-      '🚀 ~ file: Details.js ~ line 192 ~ Details ~ currentWeather',
-      currentWeather,
-    );
-    return <Loader />;
-  }
-  const {weather, main} = currentWeather;
+  const {weather, main} = weatherData;
 
   return (
     <ImageBackground
@@ -199,7 +159,7 @@ const Details = ({navigation}) => {
       imageStyle={styles.image}>
       <StatusBar barStyle="light-content" />
       <Header
-        headerTitle={position.city}
+        headerTitle={deviceLocation.city}
         rightButton
         onRightButtonPress={() => navigation.navigate('Search')}
       />
@@ -219,36 +179,7 @@ const Details = ({navigation}) => {
               main.temp_max,
             )}°`}</H2>
           </BasicRow>
-          <View style={styles.forecastContainer}>
-            {forecast.map((day) => (
-              <BasicRow key={day.day} style={styles.basicRow}>
-                <P style={styles.textDecoration}>
-                  {format(new Date(day.day), 'EEEE, MMM d')}
-                </P>
-                <View style={styles.group}>
-                  <P style={[styles.temp, styles.textDecoration]}>
-                    {Math.round(day.temp_max)}
-                  </P>
-                  <P style={styles.textDecoration}>
-                    {Math.round(day.temp_min)}
-                  </P>
-                </View>
-              </BasicRow>
-            ))}
-          </View>
-          <MaterialAlert
-            visible={alertVisible}
-            cancelTitle="Cancel"
-            confirmTitle="OK"
-            onCancelPress={() => {
-              setAlertVisible(false);
-            }}
-            onConfirmPress={() => {
-              setAlertVisible(false);
-            }}
-            title="Enable Location"
-            message="Help us bring you the local weather. Please give us access to your location."
-          />
+          <ForeCast location={deviceLocation} />
         </SafeAreaView>
       </ScrollView>
     </ImageBackground>

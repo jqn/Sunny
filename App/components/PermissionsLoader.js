@@ -186,10 +186,13 @@ const PermissionsLoader = ({appearance, loadingCallback, permission}) => {
 PermissionsLoader.defaultProps = {
   appearance: 'dark',
   permission: false,
+  loadingCallback: () => {},
 };
 
 PermissionsLoader.propTypes = {
   appearance: PropTypes.string,
+  permission: PropTypes.bool,
+  loadingCallback: PropTypes.func,
 };
 
 export default PermissionsLoader;

@@ -144,6 +144,8 @@ const GeoLoader = ({appearance, locationCallback}) => {
       </View>
     );
   }
+
+  return <View />;
 };
 
 GeoLoader.defaultProps = {

@@ -2,11 +2,11 @@ import Config from 'react-native-config';
 
 const apiKey = Config.WEATHER_API_KEY;
 
-export const weatherApi = (path, {zipcode, coords}) => {
+export const weatherAPI = (path, {zipCode, coords}) => {
   let suffix = '';
 
-  if (zipcode) {
-    suffix = `zip=${zipcode}`;
+  if (zipCode) {
+    suffix = `zip=${zipCode}`;
   } else if (coords) {
     suffix = `lat=${coords.latitude}&lon=${coords.longitude}`;
   }

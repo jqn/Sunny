@@ -70,11 +70,8 @@ const useGeoPosition = () => {
     };
     fetchLocation();
   }, []);
-  const runGeolocation = () => {
-    dispatch({type: 'start'});
-  };
 
-  return {...state, runGeolocation};
+  return {...state};
 };
 
 export default useGeoPosition;
