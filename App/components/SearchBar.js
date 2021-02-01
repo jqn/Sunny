@@ -55,6 +55,7 @@ export const SearchBar = ({onSearch, searchButtonEnabled, ...rest}) => {
         keyboardType="number-pad"
         {...rest}
         selectionColor="#FFF"
+        placeholderTextColor="#AAA"
       />
       <TouchableOpacity onPress={onSearch} disabled={!searchButtonEnabled}>
         <Text style={[styles.buttonText, getColor(searchButtonEnabled)]}>
