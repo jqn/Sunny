@@ -1,6 +1,9 @@
 import React, {useState, useCallback} from 'react';
 import {Linking, Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {H2} from './Text';
 import PropTypes from 'prop-types';
+
+import {useNavigation} from '@react-navigation/native';
 
 import {requestLocationPermissions} from '../services/permissions';
 
@@ -72,10 +75,24 @@ const styles = StyleSheet.create({
     left: 0,
     borderRadius: 20,
   },
+  linkText: {
+    color: '#000',
+    paddingVertical: 8,
+    textAlign: 'center',
+  },
+  link: {
+    backgroundColor: '#FFF',
+    padding: 8,
+  },
+  activeLink: {
+    backgroundColor: '#AAA',
+    padding: 8,
+  },
 });
 
 const PermissionsLoader = ({appearance, loadingCallback, permission}) => {
   const [allowed, setAllowed] = useState(permission);
+  const navigation = useNavigation();
 
   const getColorScheme = () => {
     if (appearance === 'light') {
@@ -177,6 +194,13 @@ const PermissionsLoader = ({appearance, loadingCallback, permission}) => {
             pressed ? styles.pressedButton : styles.button,
           ]}>
           <Text style={styles.buttonText}>Go To Settings</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            navigation.navigate('Search');
+          }}
+          style={({pressed}) => [pressed ? styles.activeLink : styles.link]}>
+          <H2 style={styles.linkText}>Close</H2>
         </Pressable>
       </View>
     </View>

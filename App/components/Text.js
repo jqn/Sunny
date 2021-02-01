@@ -14,9 +14,11 @@ const styles = StyleSheet.create({
   },
   h2: {
     fontSize: 20,
+    fontFamily: 'Lato-Regular',
   },
   p: {
     fontSize: 16,
+    fontFamily: 'Lato-Regular',
   },
 });
 

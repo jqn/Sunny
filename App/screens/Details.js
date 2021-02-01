@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   ImageBackground,
   SafeAreaView,
@@ -8,26 +8,18 @@ import {
   View,
 } from 'react-native';
 
-import {format} from 'date-fns';
-
 import {WeatherIcon} from '../components/WeatherIcon';
 import {BasicRow} from '../components/List';
-import {H1, H2, P} from '../components/Text';
+import {H1, H2} from '../components/Text';
 import Header from '../components/Header';
-import MaterialAlert from '../components/MaterialAlert';
 import PermissionsLoader from '../components/PermissionsLoader';
 import GeoLoader from '../components/GeoLoader';
 import Loader from '../components/Loader';
 import ForeCast from '../components/ForeCast';
 
-import forecastData from '../data/forecast';
-// import weatherData from '../data/weather';
 import getWeatherImage from '../utils/getWeatherImage';
-// import {weatherApi} from '../services/weatherAPI';
 
 import useWeatherAPI from '../hooks/useWeatherAPI';
-import useForecastAPI from '../hooks/useForecastAPI';
-import useGeoPosition from '../hooks/useGeoPosition';
 
 import {checkLocationPermissions} from '../services/permissions';
 
@@ -37,21 +29,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#1E3FC2',
   },
-  // forecastContainer: {
-  //   paddingHorizontal: 8,
-  //   marginTop: 8,
-  // },
-  // basicRow: {
-  //   justifyContent: 'space-between',
-  // },
-  // group: {
-  //   flexDirection: 'row',
-  // },
-  // temp: {
-  //   fontWeight: '700',
-  //   fontFamily: 'Lato-Regular',
-  //   marginRight: 8,
-  // },
   image: {
     flex: 1,
     width: null,
@@ -64,35 +41,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
 });
-
-const groupForecastByDay = (list) => {
-  const data = {};
-
-  list.forEach((item) => {
-    const [day] = item.dt_txt.split(' ');
-    if (data[day]) {
-      if (data[day].temp_max < item.main.temp_max) {
-        data[day].temp_max = item.main.temp_max;
-      }
-
-      if (data[day].temp_min > item.main.temp_min) {
-        data[day].temp_min = item.main.temp_min;
-      }
-    } else {
-      data[day] = {
-        temp_min: item.main.temp_min,
-        temp_max: item.main.temp_max,
-      };
-    }
-  });
-
-  const formattedList = Object.keys(data).map((key) => ({
-    day: key,
-    ...data[key],
-  }));
-
-  return formattedList;
-};
 
 const Details = ({navigation}) => {
   const [permissions, setPermissions] = useState(null);
@@ -130,7 +78,7 @@ const Details = ({navigation}) => {
     );
   }
 
-  if (deviceLocation === null && isLoading) {
+  if (!deviceLocation && isLoading) {
     return (
       <GeoLoader
         permission={permissions}

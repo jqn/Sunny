@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 
 import {BasicRow} from './List';
-import {H1, H2, P} from './Text';
+import {P} from './Text';
 
 import {format} from 'date-fns';
 
