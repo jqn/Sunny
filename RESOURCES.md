@@ -5,3 +5,5 @@
 [React Native By Example - Weather App](https://www.reactnativebyexample.com/)
 
 [Handlebar Labs](https://github.com/HandlebarLabs)
+
+[OpenWeather Condition Codes](https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2)

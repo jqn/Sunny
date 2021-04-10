@@ -99,10 +99,11 @@ const Details = ({navigation}) => {
   }
 
   const {weather, main} = weatherData;
+  console.log('🚀 ~ file: Details.js ~ line 102 ~ Details ~ weather', weather);
 
   return (
     <ImageBackground
-      source={getWeatherImage('Clear')}
+      source={getWeatherImage(weather[0].main)}
       style={styles.container}
       imageStyle={styles.image}>
       <StatusBar barStyle="light-content" />

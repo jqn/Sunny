@@ -22,7 +22,7 @@ export const getWeatherIcon = (icon) => {
       return require('../images/weatherIcons/09n.png');
     case '09d':
       return require('../images/weatherIcons/09d.png');
-    case '04d':
+    case '04n':
       return require('../images/weatherIcons/04d.png');
     case '03n':
       return require('../images/weatherIcons/03n.png');

@@ -1,10 +1,40 @@
-import geoPositionReducer from '../reducers/geoPositionReducer';
 import {useEffect, useReducer} from 'react';
 
 import Geolocation from 'react-native-geolocation-service';
 import Geocoder from '@timwangdev/react-native-geocoder';
 
 import {checkLocationPermissions} from '../services/permissions';
+
+// Original example
+// https://kentcdodds.com/blog/stop-using-isloading-booleans
+// https://codesandbox.io/s/dark-lake-r07lr?file=/src/index.js:1256-1261
+const geoPositionReducer = (state, action) => {
+  switch (action.type) {
+    case 'error': {
+      return {
+        ...state,
+        status: 'rejected',
+        error: action.error,
+      };
+    }
+    case 'success': {
+      return {
+        ...state,
+        status: 'resolved',
+        position: action.position,
+      };
+    }
+    case 'start': {
+      return {
+        ...state,
+        status: 'pending',
+      };
+    }
+    default: {
+      throw new Error(`Unhandled action type: ${action.type}`);
+    }
+  }
+};
 
 const geoLocate = () => {
   return new Promise((resolve, reject) => {
