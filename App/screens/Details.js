@@ -43,63 +43,38 @@ const styles = StyleSheet.create({
 });
 
 const Details = ({navigation}) => {
-  const [permissions, setPermissions] = useState(null);
   const [deviceLocation, setDeviceLocation] = useState(null);
   const {weatherData, error, isLoading, setPath} = useWeatherAPI();
+  console.log(
+    '🚀 ~ file: Details.js ~ line 48 ~ Details ~ isLoading',
+    isLoading,
+  );
 
   useEffect(() => {
-    const checkPermissions = async () => {
-      let locationAllowed = await checkLocationPermissions();
-
-      setPermissions(locationAllowed);
-    };
-    checkPermissions();
-  }, []);
-
-  useEffect(() => {
-    if (deviceLocation !== null) {
+    if (deviceLocation) {
+      console.log(
+        '🚀 ~ file: Details.js ~ line 55 ~ useEffect ~ deviceLocation',
+        deviceLocation,
+      );
       setPath({endpoint: '/weather', zipCode: deviceLocation.zipCode});
     }
-  }, [deviceLocation, setPath]);
+  }, [setPath, deviceLocation]);
 
-  if (permissions === null) {
+  // return <Loader />;
+
+  if (!weatherData && !isLoading) {
     return <Loader />;
   }
 
-  if (permissions === false) {
-    return (
-      <PermissionsLoader
-        permission={permissions}
-        appearance="light"
-        loadingCallback={(value) => {
-          setPermissions(value);
-        }}
-      />
-    );
-  }
-
-  if (!deviceLocation && isLoading) {
-    return (
-      <GeoLoader
-        permission={permissions}
-        appearance="light"
-        locationCallback={(location) => {
-          setDeviceLocation(location);
-        }}
-      />
-    );
+  if (isLoading) {
+    return <GeoLoader appearance="light" />;
   }
 
   if (error) {
     return <View />;
   }
 
-  if (!weatherData && isLoading) {
-    return <Loader />;
-  }
-
   const {weather, main} = weatherData;
-  console.log('🚀 ~ file: Details.js ~ line 102 ~ Details ~ weather', weather);
 
   return (
     <ImageBackground

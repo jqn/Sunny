@@ -14,6 +14,10 @@ const useWeatherAPI = (initialPath) => {
     setWeatherData(null);
     setError(null);
 
+    console.log(
+      '🚀 ~ file: useWeatherAPI.js ~ line 7 ~ useWeatherAPI ~ path',
+      path,
+    );
     if (!path) {
       return;
     }

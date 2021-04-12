@@ -1,4 +1,4 @@
-import {useEffect, useReducer} from 'react';
+import {useEffect, useReducer, useCallback} from 'react';
 
 import Geolocation from 'react-native-geolocation-service';
 import Geocoder from '@timwangdev/react-native-geocoder';
